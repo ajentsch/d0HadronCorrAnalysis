@@ -1,0 +1,14 @@
+root chi square: 39.1479
+root chi square p.d.f. : 1.86419
+hand-calculated Chi-Square: 43.9343
+hand-calculated Chi-Square p.d.f.: 2.09211
+
+root chi square: 39.749
+root chi square p.d.f. : 1.89281
+hand-calculated Chi-Square: 42.7748
+hand-calculated Chi-Square p.d.f.: 2.0369
+
+root chi square: 57.7975
+root chi square p.d.f. : 2.75226
+hand-calculated Chi-Square: 60.383
+hand-calculated Chi-Square p.d.f.: 2.87538

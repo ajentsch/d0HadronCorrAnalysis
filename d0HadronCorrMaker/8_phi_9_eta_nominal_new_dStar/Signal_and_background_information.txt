@@ -1,0 +1,48 @@
+
+____________________________________________________________________________________________________
+PtBin (0: 0-1, 1: 1-2, 2: 2-3, 3: 3-5, 4: 5-10, 5: all): 2
+CentBin (0: per, 1: mid, 2: cent, 3: all): 0
+
+S+B (from integral in mass window): 2339
+S (from fit estimate): 1671.63
+B (from fit estimate): 667.375
+S+B/S from LS subtraction + expo Fit:  1.39924
+B/S+B from LS subtraction + expo Fit: 0.285325
+
+Signal over background (S/B): 2.50478
+Optimization Factor: 929.469
+
+D0 Significance:   34.564
+
+
+____________________________________________________________________________________________________
+PtBin (0: 0-1, 1: 1-2, 2: 2-3, 3: 3-5, 4: 5-10, 5: all): 2
+CentBin (0: per, 1: mid, 2: cent, 3: all): 1
+
+S+B (from integral in mass window): 22466
+S (from fit estimate): 13456.9
+B (from fit estimate): 9009.11
+S+B/S from LS subtraction + expo Fit:  1.66948
+B/S+B from LS subtraction + expo Fit: 0.401011
+
+Signal over background (S/B): 1.4937
+Optimization Factor: 5753.36
+
+D0 Significance:   89.7804
+
+
+____________________________________________________________________________________________________
+PtBin (0: 0-1, 1: 1-2, 2: 2-3, 3: 3-5, 4: 5-10, 5: all): 2
+CentBin (0: per, 1: mid, 2: cent, 3: all): 2
+
+S+B (from integral in mass window): 49366
+S (from fit estimate): 21413
+B (from fit estimate): 27953
+S+B/S from LS subtraction + expo Fit:  2.30542
+B/S+B from LS subtraction + expo Fit: 0.566239
+
+Signal over background (S/B): 0.766038
+Optimization Factor: 5930.21
+
+D0 Significance:   96.375
+

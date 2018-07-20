@@ -1,0 +1,40 @@
+dipole: (4*7) bins - 6 parameters = 22 DF.
+
+Peripheral:
+
+root chi square: 40.4594
+root chi square p.d.f. : 1.83906
+p-value (two-tailed): .0096 
+
+
+hand-calculated Chi-Square: 45.6167
+hand-calculated Chi-Square p.d.f.: 2.07348
+p-value (two-tailed): .0022
+
+
+mid-central:
+
+root chi square: 39.0933
+root chi square p.d.f. : 1.77697
+p-value (two-tailed): .0138
+
+hand-calculated Chi-Square: 41.6163
+hand-calculated Chi-Square p.d.f.: 1.89165
+p-value (two-tailed): .0070
+
+
+
+
+central:
+
+root chi square: 57.4432
+root chi square p.d.f. : 2.61106
+p-value (two-tailed): .0001
+
+
+hand-calculated Chi-Square: 59.6781
+hand-calculated Chi-Square p.d.f.: 2.71264
+p-value (two-tailed): .0001
+
+
+

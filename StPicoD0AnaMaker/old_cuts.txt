@@ -1,0 +1,190 @@
+Old cuts
+
+
+//CUT SET 4 -- ****TIGHT***   OPTIMIZED HF GROUP V2 CUTS  ***TIGHT*****	
+	
+    /*//pt = 0-1 GeV/c
+    d0TopologicalCutArray[0][0] = .0144; //.0180;//minimum decay length 
+    d0TopologicalCutArray[0][1] = .0069; //maximum DCA daughters 
+    d0TopologicalCutArray[0][2] = .0044; //.0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[0][3] = .0120;  //.008; //minimum DCA between Pi and PV 
+    d0TopologicalCutArray[0][4] = .0119;  //.008; //minimum DCA between K and PV
+    
+    //pt = 1-2 GeV/c
+    d0TopologicalCutArray[1][0] = .0204; //minimum decay length
+    d0TopologicalCutArray[1][1] = .0048; //maximum DCA daughters
+    d0TopologicalCutArray[1][2] = .0036; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[1][3] = .0102; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[1][4] = .0110; //minimum DCA between K and PV
+    
+    //pt = 2-3 GeV/c
+    d0TopologicalCutArray[2][0] = .0242; //minimum decay length
+    d0TopologicalCutArray[2][1] = .0044; //maximum DCA daughters
+    d0TopologicalCutArray[2][2] = .0031; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[2][3] = .0118; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[2][4] = .0109; //minimum DCA between K and PV
+    
+    //pt = 3-5 GeV/c
+    d0TopologicalCutArray[3][0] = .0245; //minimum decay length
+    d0TopologicalCutArray[3][1] = .0049; //maximum DCA daughters
+    d0TopologicalCutArray[3][2] = .0026; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[3][3] = .0109; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[3][4] = .0106; //minimum DCA between K and PV
+    
+    //pt = 5-10 GeV/c
+    d0TopologicalCutArray[4][0] = .0300; //minimum decay length
+    d0TopologicalCutArray[4][1] = .0047; //maximum DCA daughters
+    d0TopologicalCutArray[4][2] = .0032; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[4][3] = .0096; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[4][4] = .0080; //minimum DCA between K and PV */
+    
+	
+    //CUT SET 3 -- Quark Matter Cuts	
+   	
+    /*//pt = 0-1 GeV/c
+    d0TopologicalCutArray[0][0] = .0220; //.0180;//minimum decay length 
+    d0TopologicalCutArray[0][1] = .0055; //maximum DCA daughters 
+    d0TopologicalCutArray[0][2] = .0065; //.0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[0][3] = .008;  //.008; //minimum DCA between Pi and PV 
+    d0TopologicalCutArray[0][4] = .008;  //.008; //minimum DCA between K and PV
+    
+    //pt = 1-2 GeV/c
+    d0TopologicalCutArray[1][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[1][1] = .0055; //maximum DCA daughters
+    d0TopologicalCutArray[1][2] = .0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[1][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[1][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 2-3 GeV/c
+    d0TopologicalCutArray[2][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[2][1] = .0055; //maximum DCA daughters
+    d0TopologicalCutArray[2][2] = .0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[2][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[2][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 3-5 GeV/c
+    d0TopologicalCutArray[3][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[3][1] = .0055; //maximum DCA daughters
+    d0TopologicalCutArray[3][2] = .0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[3][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[3][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 5-10 GeV/c
+    d0TopologicalCutArray[4][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[4][1] = .0055; //maximum DCA daughters
+    d0TopologicalCutArray[4][2] = .0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[4][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[4][4] = .008; //minimum DCA between K and PV*/
+    
+    //CUT SET 3 -- OPTIMIZED CUTS FOR ALL BUT DAUGHTER DCA -- 80um
+    
+    //pt = 0-1 GeV/c
+    /*d0TopologicalCutArray[0][0] = .0141; //.0180;//minimum decay length 
+    d0TopologicalCutArray[0][1] = .0084; //maximum DCA daughters 
+    d0TopologicalCutArray[0][2] = .0061; //.0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[0][3] = .008;  //.008; //minimum DCA between Pi and PV 
+    d0TopologicalCutArray[0][4] = .008;  //.008; //minimum DCA between K and PV
+    
+    //pt = 1-2 GeV/c
+    d0TopologicalCutArray[1][0] = .0165; //minimum decay length
+    d0TopologicalCutArray[1][1] = .0066; //maximum DCA daughters
+    d0TopologicalCutArray[1][2] = .0049; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[1][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[1][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 2-3 GeV/c
+    d0TopologicalCutArray[2][0] = .0212; //minimum decay length
+    d0TopologicalCutArray[2][1] = .0057; //maximum DCA daughters
+    d0TopologicalCutArray[2][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[2][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[2][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 3-5 GeV/c
+    d0TopologicalCutArray[3][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[3][1] = .0052; //maximum DCA daughters
+    d0TopologicalCutArray[3][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[3][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[3][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 5-10 GeV/c
+    d0TopologicalCutArray[4][0] = .0240; //minimum decay length
+    d0TopologicalCutArray[4][1] = .0060; //maximum DCA daughters
+    d0TopologicalCutArray[4][2] = .0040; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[4][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[4][4] = .008; //minimum DCA between K and PV*/
+    
+    //CUT SET 3 -- OPTIMIZED CUTS FOR ALL BUT DAUGHTER DCA -- 80um
+    
+    //pt = 0-1 GeV/c
+    /*d0TopologicalCutArray[0][0] = .0141; //.0180;//minimum decay length 
+    d0TopologicalCutArray[0][1] = .0084; //maximum DCA daughters 
+    d0TopologicalCutArray[0][2] = .0061; //.0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[0][3] = .008;  //.008; //minimum DCA between Pi and PV 
+    d0TopologicalCutArray[0][4] = .008;  //.008; //minimum DCA between K and PV
+    
+    //pt = 1-2 GeV/c
+    d0TopologicalCutArray[1][0] = .0165; //minimum decay length
+    d0TopologicalCutArray[1][1] = .0066; //maximum DCA daughters
+    d0TopologicalCutArray[1][2] = .0049; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[1][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[1][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 2-3 GeV/c
+    d0TopologicalCutArray[2][0] = .0212; //minimum decay length
+    d0TopologicalCutArray[2][1] = .0057; //maximum DCA daughters
+    d0TopologicalCutArray[2][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[2][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[2][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 3-5 GeV/c
+    d0TopologicalCutArray[3][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[3][1] = .0052; //maximum DCA daughters
+    d0TopologicalCutArray[3][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[3][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[3][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 5-10 GeV/c
+    d0TopologicalCutArray[4][0] = .0240; //minimum decay length
+    d0TopologicalCutArray[4][1] = .0060; //maximum DCA daughters
+    d0TopologicalCutArray[4][2] = .0040; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[4][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[4][4] = .008; //minimum DCA between K and PV*/
+    
+    
+    
+    //CUT SET 1 -- optimized except DCA daughters
+	
+	/*//pt = 0-1 GeV/c
+    d0TopologicalCutArray[0][0] = .0145; //.0180;//minimum decay length 
+    d0TopologicalCutArray[0][1] = .0084; //maximum DCA daughters 
+    d0TopologicalCutArray[0][2] = .0061; //.0065; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[0][3] = .008;  //.008; //minimum DCA between Pi and PV 
+    d0TopologicalCutArray[0][4] = .008;  //.008; //minimum DCA between K and PV
+    
+    //pt = 1-2 GeV/c
+    d0TopologicalCutArray[1][0] = .0181; //minimum decay length
+    d0TopologicalCutArray[1][1] = .0066; //maximum DCA daughters
+    d0TopologicalCutArray[1][2] = .0049; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[1][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[1][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 2-3 GeV/c
+    d0TopologicalCutArray[2][0] = .0212; //minimum decay length
+    d0TopologicalCutArray[2][1] = .0057; //maximum DCA daughters
+    d0TopologicalCutArray[2][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[2][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[2][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 3-5 GeV/c
+    d0TopologicalCutArray[3][0] = .0220; //minimum decay length
+    d0TopologicalCutArray[3][1] = .0050; //maximum DCA daughters
+    d0TopologicalCutArray[3][2] = .0038; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[3][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[3][4] = .008; //minimum DCA between K and PV
+    
+    //pt = 5-10 GeV/c
+    d0TopologicalCutArray[4][0] = .0259; //minimum decay length
+    d0TopologicalCutArray[4][1] = .0060; //maximum DCA daughters
+    d0TopologicalCutArray[4][2] = .0040; //maximum DCA between d0 vector and PV 
+    d0TopologicalCutArray[4][3] = .008; //minimum DCA between Pi and PV
+    d0TopologicalCutArray[4][4] = .008; //minimum DCA between K and PV*/

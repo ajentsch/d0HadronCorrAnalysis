@@ -1,0 +1,373 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
+
+#include "TFile.h"
+#include "TClonesArray.h"
+#include "TTree.h"
+#include "TNtuple.h"
+
+#include "StPicoDstMaker/StPicoDstMaker.h"
+#include "StPicoDstMaker/StPicoDst.h"
+#include "StPicoDstMaker/StPicoEvent.h"
+#include "StPicoDstMaker/StPicoTrack.h"
+#include "StPicoD0EventMaker/StPicoD0Event.h"
+#include "StPicoD0EventMaker/StKaonPion.h"
+#include "StPicoD0AnaMaker.h"
+#include "StPicoHFMaker/StHFCuts.h"
+
+ClassImp(StPicoD0AnaMaker)
+
+StPicoD0AnaMaker::StPicoD0AnaMaker(char const * name,char const * inputFilesList, 
+    char const * outName,StPicoDstMaker* picoDstMaker): 
+  StMaker(name),mPicoDstMaker(picoDstMaker),mPicoD0Event(NULL), mOutFileName(outName), mInputFileList(inputFilesList),
+  mOutputFile(NULL), mChain(NULL), mEventCounter(0), mHFCuts(NULL)
+{}
+
+Int_t StPicoD0AnaMaker::Init()
+{
+   mPicoD0Event = new StPicoD0Event();
+
+   mChain = new TChain("T");
+   std::ifstream listOfFiles(mInputFileList.Data());
+   if (listOfFiles.is_open())
+   {
+      std::string file;
+      while (getline(listOfFiles, file))
+      {
+         LOG_INFO << "StPicoD0AnaMaker - Adding :" << file << endm;
+         mChain->Add(file.c_str());
+      }
+   }
+   else
+   {
+      LOG_ERROR << "StPicoD0AnaMaker - Could not open list of files. ABORT!" << endm;
+      return kStErr;
+   }
+
+   mChain->GetBranch("dEvent")->SetAutoDelete(kFALSE);
+   mChain->SetBranchAddress("dEvent", &mPicoD0Event);
+
+   mOutputFile = new TFile(mOutFileName.Data(), "RECREATE");
+   mOutputFile->cd();
+
+   if (!mHFCuts)
+    mHFCuts = new StHFCuts;   
+   mHFCuts->init();
+
+   // --------------------Begin User Variables-----------------------------------
+   
+   ptDist          = new TH1D("Pt Distribution", "Pt Distribution", 1000, 0, 10);              
+   invMass         = new TH1D("unlikeSign", "unlikeSign", 45, 1.6, 2.1);
+   angCorrPhi      = new TH1D("#Delta Phi", "#Delta#phi", 250, -TMath::PiOver2(), 3*TMath::PiOver2());
+   angCorrEta      = new TH1D("#Delta#Eta", "#Delta#eta", 1000, -2 , 2);  
+   kaonDist        = new TH1D("Kaon Distribution", "Kaon Distribution", 500, 0 , 500);
+   pionDist        = new TH1D("Pion Distribution", "Pion Distribution", 2000, 0 , 2000);
+   likeSignBG      = new TH1D("Like Sign BG", "Like Sign BG", 45, 1.6, 2.1);
+   invMassMinusBG  = new TH1D("D0 minus LS BG", "D0 minus LS BG", 45, 1.6, 2.1);
+   angCorr2DAll    = new TH2D("2D Ang Corr", "2D Ang Corr", 25, -2, 2, 25, -TMath::PiOver2(), 3*TMath::PiOver2());
+
+   //QA Histograms
+   
+   kaonPtDist      = new TH1D("Kaon Pt Distribution", "Kaon Pt Distribution", 1000, 0, 5);
+   pionPtDist      = new TH1D("Pion Pt Distribution", "Pion Pt Distribution", 1000, 0, 5);
+   kaonEtaDist     = new TH1D("Kaon Eta Distribution", "Kaon Eta Distribution", 1000, -1, 1);
+   pionEtaDist     = new TH1D("Pion Eta Distribution", "Pion Eta Distribution", 1000, -1, 1);
+   kaonPhiDist     = new TH1D("Kaon Phi Distribution", "Kaon Phi Distribution", 1000, -2*TMath::Pi(), 2*TMath::Pi());
+   pionPhiDist     = new TH1D("Pion Phi Distribution", "Pion Phi Distribution", 1000, -2*TMath::Pi(), 2*TMath::Pi());
+   kaonDCAprimary  = new TH1D("DCA kaons from primary", "DCA kaons from primary", 500, 0.0, 0.5);
+   pionDCAprimary  = new TH1D("DCA pions from primary", "DCA pions from primary", 500, 0.0, 0.5);
+
+
+
+   kaonDCAfromD0   = new TH1D("DCA for kaons from D0", "DCA for kaons from D0", 500, 0.0, 0.5);
+   pionDCAfromD0   = new TH1D("DCA for pions from D0", "DCA for pions from D0", 500, 0.0, 0.65);
+   decayLengthQA   = new TH1D("D0 Candidate Decay Length (no mass cut)", "D0 Candidate Decay Length (no mass cut)", 500, 0.0, 1.5);
+   pointingAngleQA = new TH1D("D0 Candidate Pointing Angle(no mass cut)", "D0 Candidate Pointing Angle (no mass cut)", 500, 0.0, 1.7);
+   daughterDCAQA   = new TH1D("D0 Daughter DCA", "D0 Daughter DCA (no mass cut)", 500, 0.0, .01);
+
+   //QA for mass-cut D0  
+
+   D0ptDist        = new TH1D("D0 Candidate pt Dist (mass cut)", "D0 Candidate pt Dist (mass cut)", 1000, 0, 10);
+   D0EtaDist       = new TH1D("D0 Eta Dist", "D0 #eta Dist. (mass cut)", 25, -1, 1);
+   D0PhiDist       = new TH1D("D0 Phi Dist", "D0 #phi Dist. (mass cut)", 25, -2*TMath::Pi(), 2*TMath::Pi());
+   D0Count         = new TH1D("D0 Count", "D0 Count", 1, 0, 1);
+
+   eventCounter    = new TH1D("number of events used", "number of events used", 3, 0, 3);
+   
+   //Histogram formatting
+
+   eventCounter->GetXaxis()->SetBinLabel(1,"minBias");
+   eventCounter->GetXaxis()->SetBinLabel(2,"total");
+   eventCounter->GetXaxis()->SetBinLabel(3,"events from bad runs");
+   //----------------------End User Variables------------------------------------
+   
+   return kStOK;
+}
+//-----------------------------------------------------------------------------
+StPicoD0AnaMaker::~StPicoD0AnaMaker()
+{
+   /*  */
+}
+//-----------------------------------------------------------------------------
+Int_t StPicoD0AnaMaker::Finish()
+{
+   LOG_INFO << " StPicoD0AnaMaker - writing data and closing output file " <<endm;
+   mOutputFile->cd();
+   // save user variables here
+   
+   ptDist->Write();
+   invMass->Write();
+   kaonDist->Write();
+   pionDist->Write();
+   likeSignBG->Write();
+  // angCorrEta->Write();
+  // angCorrPhi->Write();
+  // angCorr2DAll->Write();
+   invMassMinusBG->Write();
+   D0EtaDist->Write();
+   D0PhiDist->Write();
+   D0Count->Write();
+   eventCounter->Write();
+   kaonDCAfromD0->Write();
+   pionDCAfromD0->Write();
+   decayLengthQA->Write();
+   pointingAngleQA->Write();
+   daughterDCAQA->Write();
+   D0ptDist->Write();   
+   kaonPtDist->Write();
+   pionPtDist->Write();
+   kaonEtaDist->Write();
+   pionEtaDist->Write();
+   kaonPhiDist->Write();
+   pionPhiDist->Write();
+   kaonDCAprimary->Write();
+   pionDCAprimary->Write();
+
+   mOutputFile->Close();
+  
+
+   return kStOK;
+}
+//-----------------------------------------------------------------------------
+Int_t StPicoD0AnaMaker::Make()
+{
+   readNextEvent();
+
+   if (!mPicoDstMaker)
+   {
+      LOG_WARN << " StPicoD0AnaMaker - No PicoDstMaker! Skip! " << endm;
+      return kStWarn;
+   }
+
+   StPicoDst const* picoDst = mPicoDstMaker->picoDst();
+
+
+   if (!picoDst)
+   {
+      LOG_WARN << "StPicoD0AnaMaker - No PicoDst! Skip! " << endm;
+      return kStWarn;
+   }
+
+   if(mPicoD0Event->runId() != picoDst->event()->runId() ||
+       mPicoD0Event->eventId() != picoDst->event()->eventId())
+   {
+     LOG_ERROR <<" StPicoD0AnaMaker - !!!!!!!!!!!! ATTENTION !!!!!!!!!!!!!"<<endm;
+     LOG_ERROR <<" StPicoD0AnaMaker - SOMETHING TERRIBLE JUST HAPPENED. StPicoEvent and StPicoD0Event are not in sync."<<endm;
+     exit(1);
+   }
+
+   //-------------------Begin User Analysis---------------------------
+
+
+ // if(!mHFCuts->isGoodEvent(const_cast<const StPicoDst*>(picoDst), NULL)) return kStOk; //makes sure the event comes from good run
+  if(!mHFCuts->isGoodRun(picoDst->event())){
+      
+      eventCounter->Fill(1);
+      eventCounter->Fill(2);
+      return kStOk; //makes sure the event comes from good run
+  }
+
+  eventCounter->Fill(1);
+  if(!picoDst->event()->isMinBias()) {return kStOK;}          //min bias event flag
+  //if(!picoDst->event()->isCentral()) {return kStOK;}          //central events flag ---- What are the criteria for central events
+  eventCounter->Fill(0);
+
+  if(mPicoD0Event->nKaons() > 0){ kaonDist->Fill(mPicoD0Event->nKaons());}
+  if(mPicoD0Event->nPions() > 0){ pionDist->Fill(mPicoD0Event->nPions());}
+
+  //Fill kaon and pion pt dist
+ // for(int i = 0; i < mPicoD0Event->nKaons(); i++){
+
+     
+
+  double delPhi = 0;
+  double delEta = 0;
+  double pt = 0;
+
+   TClonesArray const * aKaonPion = mPicoD0Event->kaonPionArray();
+
+   for (int idx = 0; idx < aKaonPion->GetEntries(); ++idx){
+     
+	 // this is an example of how to get the kaonPion pairs and their corresponding tracks
+      StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idx);
+     // ptDist->Fill(kp->pt());
+      
+
+      StPicoTrack const* kaon = picoDst->track(kp->kaonIdx());
+      StPicoTrack const* pion = picoDst->track(kp->pionIdx());
+      
+     // if(kaon->charge()*pion->charge() > 0) {likeSignBG->Fill(kp->m());}
+
+    if(!isGoodPair(kp)) continue;
+   // if(kp->kaonDca() > .008 || kp->pionDca() > .008) continue;
+
+    // double phi = 0;
+   //  double eta = 0;
+
+     // StPicoTrack const* kaon = picoDst->track(kp->kaonIdx());
+     // StPicoTrack const* pion = picoDst->track(kp->pionIdx());
+
+     // cout << "Pt for pair: " << kp->pt() << " GeV" << endl;
+      ptDist->Fill(kp->pt());
+      if(kaon->charge()*pion->charge() < 0) {invMass->Fill(kp->m());}
+      if(kaon->charge()*pion->charge() > 0) {likeSignBG->Fill(kp->m());} 
+      
+       D0EtaDist->Fill(kp->eta());
+       D0PhiDist->Fill(kp->phi());
+
+    /******************** Fill QA Histograms ***************************/
+
+     
+     kaonDCAfromD0->Fill(kp->kaonDca());
+     pionDCAfromD0->Fill(kp->pionDca());
+     decayLengthQA->Fill(kp->decayLength());
+     pointingAngleQA->Fill(kp->pointingAngle());
+     daughterDCAQA->Fill(kp->dcaDaughters());
+
+	/********************************************************/
+       
+	if(kp->m() < 1.95 && kp->m() > 1.75 && kaon->charge()*pion->charge() < 0){
+
+           D0Count->Fill(0);
+           D0ptDist->Fill(kp->pt()); 
+          // D0EtaDist->Fill(kp->eta());
+          // D0PhiDist->Fill(kp->phi());
+
+     	  // for(unsigned int i = 0; i < picoDst->numberOfTracks(); ++i){
+           
+          // if(i == kp->kaonIdx() || i == kp->pionIdx()) { continue; }    // Need to check this -- should avoid doing correlations with a D0 candidate daughter
+           
+           
+          /* StPicoTrack* trk = picoDst->track(i);
+           pt = TMath::Sqrt((trk->pMom().x()*trk->pMom().x())+(trk->pMom().y()*trk->pMom().y()));          
+
+          if(mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCKaon(trk){
+          	kaonPtDist->Fill(pt);
+                continue;
+          } 
+         
+          if(mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCPion(trk)(
+          	pionPtDist->Fill(pt);
+                continue;
+          }*/
+ 
+          // phi = TMath::ATan2(trk->pMom().x(),trk->pMom().y());  
+          // delPhi = kp->phi() - phi;
+          // if(delPhi < -TMath::PiOver2()){ delPhi = delPhi + 2*TMath::Pi(); }
+          // else if(delPhi > 3*TMath::PiOver2()){ delPhi = delPhi - 2*TMath::Pi(); }
+          // angCorrPhi->Fill(delPhi);
+
+          // eta = trk->pMom().pseudoRapidity();
+
+          // delEta = kp->eta()-eta;
+          // angCorrEta->Fill(delEta);
+ 
+          // angCorr2DAll->Fill(delEta, delPhi);
+
+         
+	}
+        
+
+   }
+
+   double phi = 0;
+   double eta = 0;
+
+   for(unsigned int i = 0; i < picoDst->numberOfTracks(); ++i){
+
+          StPicoTrack* trk = picoDst->track(i);
+          pt = TMath::Sqrt((trk->pMom().x()*trk->pMom().x())+(trk->pMom().y()*trk->pMom().y()));
+          phi = trk->pMom().phi();  // TMath::ATan2(trk->pMom().y(),trk->pMom().x());
+          eta = trk->pMom().pseudoRapidity();
+          if(pt<.1){continue;}
+
+          if(mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCKaon(trk)){
+                
+                kaonPtDist->Fill(pt);
+                kaonEtaDist->Fill(eta);
+                kaonPhiDist->Fill(phi);
+               // kaonDCAprimary->Fill(      
+                continue;
+          }
+
+          if(mHFCuts->isGoodTrack(trk) && mHFCuts->isTPCPion(trk)){
+                
+                pionPtDist->Fill(pt);
+                pionEtaDist->Fill(eta);
+                pionPhiDist->Fill(phi);
+               // pionDCAprimary->Fill(
+                continue;
+          }
+	}
+   
+   invMassMinusBG->Add(invMass, likeSignBG, 1, -1);
+
+
+
+
+   //-------------------End User Analysis--------------------------------
+   
+   // check if good event (including bad run)
+   
+
+/*   for (int idx = 0; idx < aKaonPion->GetEntries(); ++idx)
+   {
+      // this is an example of how to get the kaonPion pairs and their corresponding tracks
+      StKaonPion const* kp = (StKaonPion*)aKaonPion->At(idx);
+      if(!isGoodPair(kp)) continue;
+
+      StPicoTrack const* kaon = picoDst->track(kp->kaonIdx());
+      StPicoTrack const* pion = picoDst->track(kp->pionIdx());
+
+   }*/
+
+   return kStOK;
+}
+//-----------------------------------------------------------------------------
+bool StPicoD0AnaMaker::isGoodPair(StKaonPion const* const kp) const
+{
+  if(!kp) return false;
+
+  StPicoTrack const* kaon = mPicoDstMaker->picoDst()->track(kp->kaonIdx());
+  StPicoTrack const* pion = mPicoDstMaker->picoDst()->track(kp->pionIdx());
+
+  //  To be replaced by mHFCuts->isGoodSecondaryVertexPair(kp))
+  bool pairCuts = kp->m() > mHFCuts->cutSecondaryPairMassMin() && 
+    kp->m() < mHFCuts->cutSecondaryPairMassMax() &&
+    std::cos(kp->pointingAngle()) > mHFCuts->cutSecondaryPairCosThetaMin() &&
+    kp->decayLength()  > mHFCuts->cutSecondaryPairDecayLengthMin() && 
+    kp->decayLength()  < mHFCuts->cutSecondaryPairDecayLengthMax() &&
+    kp->dcaDaughters() < mHFCuts->cutSecondaryPairDcaDaughtersMax();
+
+  return (mHFCuts->isGoodTrack(kaon) && mHFCuts->isGoodTrack(pion) &&
+	  mHFCuts->isTPCKaon(kaon) && mHFCuts->isTPCPion(pion) && 
+	  pairCuts);
+}
+
+
+/*void StPicoD0AnaMaker::likeSign(StPicoTrack const* kaon, StPicoTrack const* pion)
+{
+ 
+  double likeSignMass = calcInvMass(kaon, posList[i].py, posList[i].pz, negList[j].px, negList[j].py, negList[j].pz, mass1, mass2); */ 
